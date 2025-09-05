@@ -1,0 +1,302 @@
+/* Color Variables */
+:root {
+  --color-bg-start: #12121d;
+  --color-bg-end: #1f1f3a;
+  --color-text: #f0e6d2;
+  --color-gold: #f2c94c;
+  --color-gold-light: #fff8c0;
+  --color-gold-dark: #d4af37;
+  --color-indigo: #2c2c54;
+  --color-navy: #1a1a2e;
+  --color-shadow-gold: rgba(242, 201, 76, 0.3);
+  --color-shadow-gold-light: rgba(242, 201, 76, 0.2);
+  --color-shadow-gold-strong: rgba(242, 201, 76, 0.85);
+  --color-shadow-black: rgba(0, 0, 0, 0.5);
+}
+
+/* Global or wrapping container style */
+
+body, html {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, var(--color-bg-start) 0%, var(--color-bg-end) 100%);
+  color: var(--color-text);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+}
+
+.filterContainer {
+  max-width: 1200px;
+  margin: 2rem auto 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  background: var(--color-indigo);
+  padding: 1.5rem 2rem;
+  border-radius: 14px;
+  box-shadow:
+    0 4px 20px var(--color-shadow-gold),
+    inset 0 0 15px #f2c94c33;
+}
+
+.filterLabel {
+  font-weight: 700;
+  color: var(--color-gold);
+  font-size: 1.1rem;
+  margin-right: 0.8rem;
+  user-select: none;
+  min-width: 80px;
+  align-self: center;
+}
+
+/* Wrapper for inputs/selects with badges */
+.selectWrapper {
+  position: relative;
+  display: inline-block;
+  flex: 1;
+  min-width: 220px;
+}
+
+/* Text input styles */
+.filterInput {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-indigo);
+  border: 2px solid var(--color-gold);
+  border-radius: 10px;
+  background: var(--color-gold);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.filterInput::placeholder {
+  font-weight: 500;
+  color: #5a5a7a;
+}
+
+.filterInput:focus {
+  outline: none;
+  background: var(--color-gold-light);
+  border-color: var(--color-gold-dark);
+  box-shadow: 0 0 8px var(--color-gold-dark)aa;
+}
+
+/* Select styles */
+.filterSelect {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-indigo);
+  border: 2px solid var(--color-gold);
+  border-radius: 10px;
+  background: var(--color-gold) url('data:image/svg+xml;utf8,<svg fill="%232c2c54" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 1rem center;
+  background-size: 1em;
+  cursor: pointer;
+  appearance: none;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.filterSelect:focus {
+  outline: none;
+  background-color: var(--color-gold-light);
+  border-color: var(--color-gold-dark);
+  box-shadow: 0 0 8px var(--color-gold-dark)aa;
+}
+
+/* Badge styles (positioned absolutely inside .selectWrapper) */
+.filterBadge {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-weight: 700;
+  color: var(--color-indigo);
+  background: var(--color-shadow-gold-strong);
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  user-select: none;
+  font-size: 0.9rem;
+  min-width: 24px;
+  text-align: center;
+  box-shadow: 0 0 6px var(--color-gold);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  pointer-events: none;
+}
+
+.filterBadge:hover {
+  background: var(--color-gold);
+  color: var(--color-indigo);
+  box-shadow: 0 0 10px var(--color-gold);
+  cursor: default;
+}
+
+/* Accessibility focus outlines */
+.navButton:focus-visible,
+.filterInput:focus-visible,
+.filterSelect:focus-visible,
+.resetButton:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 1rem 2rem;
+  background: var(--color-navy);
+  border-radius: 12px;
+  box-shadow: 0 0 30px #f2c94c33;
+  color: var(--color-text);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-gold);
+  text-shadow: 0 0 8px #f2c94c88;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
+}
+
+.card {
+  position: relative;
+  background-color: var(--color-indigo);
+  padding: 1.25rem 1.5rem;
+  border-radius: 14px;
+  box-shadow:
+    0 4px 15px var(--color-shadow-black),
+    inset 0 0 20px #f2c94c33;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  color: var(--color-text);
+  will-change: transform;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow:
+    0 10px 30px #f2c94c99,
+    inset 0 0 25px #f2c94c55;
+}
+
+.cardImage {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1.25rem;
+  background-color: #444775;
+  box-shadow: 0 0 10px #f2c94c44;
+  display: block;
+  position: relative;
+}
+
+/* Navigation buttons */
+.navButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(145deg, #d4af37cc, #b8860bcc);
+  border: none;
+  color: #3b3244;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 7px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  z-index: 10;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  width: 44px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 7px #b8860b99;
+  text-shadow: 0 0 3px #fff3b0aa;
+}
+
+.navButton:hover {
+  background: linear-gradient(145deg, var(--color-gold), var(--color-gold-dark));
+  box-shadow: 0 5px 12px #f2c94ccc;
+}
+
+.prevButton {
+  left: 10px;
+}
+
+.nextButton {
+  right: 10px;
+}
+
+.cardTitle {
+  font-size: 1.4rem;
+  margin: 0.75rem 0 0.5rem;
+  color: var(--color-gold);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 6px #f2c94cbb;
+}
+
+.cardText {
+  margin: 0.3rem 0;
+  color: #ddd8c9;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filterContainer {
+    flex-direction: column;
+    padding: 1rem 1.2rem;
+  }
+
+  .filterInput,
+  .filterSelect {
+    min-width: 100%;
+  }
+
+  .filterLabel {
+    margin-bottom: 0.3rem;
+  }
+
+  .filterBadge {
+    position: static;
+    margin-left: 0;
+    margin-top: 0.3rem;
+  }
+
+  .cardImage {
+    height: 150px;
+  }
+
+  .navButton {
+    width: 36px;
+    height: 30px;
+    font-size: 1rem;
+    padding: 6px 10px;
+  }
+}
+
+/* Extra small screen tweaks */
+@media (max-width: 480px) {
+  .grid {
+    gap: 1.2rem;
+  }
+
+  .card {
+    padding: 1rem 1rem;
+  }
+}

@@ -43,4 +43,3 @@ next-env.d.ts
 
 # custom ignores
 public/schoolImages
-lib/

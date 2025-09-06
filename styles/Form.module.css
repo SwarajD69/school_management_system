@@ -1,12 +1,22 @@
-/* Global styles for the whole page */
+:root {
+  --color-bg-dark: #1F1B24;
+  --color-bg-dark-light: #2E2734;
+  --color-bg-dark-lighter: #3B3244;
+  --color-text: #EAE0D5;
+  --color-accent: #D9B08C;
+  --color-error: #C94C4C;
+  --color-success: #6A994E;
+  --color-plum: #4B3B51;
+  --color-plum-light: #6D597A;
+}
 
 body, html {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, #1F1B24 0%, #3B3244 100%);
+  background: linear-gradient(135deg, var(--color-bg-dark) 0%, var(--color-bg-dark-lighter) 100%);
   font-family: 'Arial', sans-serif;
-  color: #EAE0D5; /* soft off-white for default text */
+  color: var(--color-text);
 }
 
 #__next {
@@ -18,15 +28,14 @@ body, html {
   background: transparent; /* inherit body background */
 }
 
-
 .container {
   max-width: 540px;
   width: 100%;
   margin: 2rem auto;
   padding: 2rem;
-  background: #1F1B24; /* dark charcoal background */
+  background: var(--color-bg-dark);
   border-radius: 10px;
-  box-shadow: 0 4px 18px rgba(75, 59, 81, 0.4); /* subtle plum shadow */
+  box-shadow: 0 4px 18px rgba(75, 59, 81, 0.4);
   box-sizing: border-box;
 }
 
@@ -34,9 +43,9 @@ body, html {
   text-align: center;
   font-size: 2rem;
   font-weight: 700;
-  color: #D9B08C; /* warm gold */
+  color: var(--color-accent);
   margin-bottom: 2rem;
-  font-family: 'Georgia', serif; /* elegant serif font */
+  font-family: 'Georgia', serif;
 }
 
 .form {
@@ -48,7 +57,7 @@ body, html {
   display: block;
   font-weight: 600;
   margin-bottom: 0.4rem;
-  color: #EAE0D5; /* soft off-white */
+  color: var(--color-text);
   font-family: 'Arial', sans-serif;
 }
 
@@ -57,15 +66,20 @@ body, html {
 .form input[type="file"] {
   width: 100%;
   padding: 0.6rem 0.8rem;
-  border: 1.5px solid #4B3B51; /* plum border */
+  border: 1.5px solid var(--color-plum);
   border-radius: 6px;
   font-size: 1rem;
   margin-bottom: 1.2rem;
   box-sizing: border-box;
-  background: #2E2734; /* slightly lighter dark */
-  color: #EAE0D5; /* off-white text */
+  background: var(--color-bg-dark-light);
+  color: var(--color-text);
   transition: border-color 0.3s ease, background-color 0.3s ease;
   font-family: 'Arial', sans-serif;
+  cursor: text;
+}
+
+.form input[type="file"] {
+  cursor: pointer;
 }
 
 .form textarea {
@@ -76,14 +90,14 @@ body, html {
 .form input:focus,
 .form textarea:focus {
   outline: none;
-  border-color: #D9B08C; /* gold border on focus */
-  background-color: #3B3244; /* lighter dark purple */
+  border-color: var(--color-accent);
+  background-color: var(--color-bg-dark-lighter);
   box-shadow: 0 0 8px 2px rgba(217, 176, 140, 0.6);
   color: #F2E8CF; /* cream text */
 }
 
 .error {
-  color: #C94C4C; /* deep red */
+  color: var(--color-error);
   font-size: 0.875rem;
   margin-top: -0.8rem;
   margin-bottom: 1.2rem;
@@ -91,8 +105,8 @@ body, html {
 }
 
 .errorMessage {
-  color: #C94C4C; /* deep red */
-  background: #3B2424; /* dark red background */
+  color: var(--color-error);
+  background: #3B2424;
   padding: 0.75rem;
   border-radius: 6px;
   text-align: center;
@@ -102,8 +116,8 @@ body, html {
 }
 
 .successMessage {
-  color: #6A994E; /* olive green */
-  background: #23391A; /* dark green background */
+  color: var(--color-success);
+  background: #23391A;
   padding: 0.75rem;
   border-radius: 6px;
   text-align: center;
@@ -115,10 +129,10 @@ body, html {
 .submitButton {
   width: 100%;
   padding: 0.9rem;
-  background-color: #4B3B51; /* plum */
+  background-color: var(--color-plum);
   border: none;
   border-radius: 6px;
-  color: #F2E8CF; /* creamy ivory */
+  color: #F2E8CF;
   font-weight: 700;
   font-size: 1.1rem;
   cursor: pointer;
@@ -126,8 +140,11 @@ body, html {
   font-family: 'Arial', sans-serif;
 }
 
-.submitButton:hover {
-  background-color: #6D597A; /* lighter plum */
+.submitButton:hover,
+.submitButton:focus {
+  background-color: var(--color-plum-light);
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 /* Preview images */
@@ -159,7 +176,7 @@ body, html {
   position: absolute;
   top: -6px;
   right: -6px;
-  background: #C94C4C;
+  background: var(--color-error);
   color: white;
   border: none;
   border-radius: 50%;
@@ -168,11 +185,15 @@ body, html {
   height: 22px;
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.removeBtn:hover {
+.removeBtn:hover,
+.removeBtn:focus {
   background: #7A2A2A;
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  transform: scale(1.1);
 }
 
 /* Responsive */

@@ -8,30 +8,45 @@ export default function ShowSchools() {
   const [searchName, setSearchName] = useState('');
   const [filterCity, setFilterCity] = useState('');
   const [filterState, setFilterState] = useState('');
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const intervalsRef = useRef({});
 
+  // Fetch schools on mount
   useEffect(() => {
+    setLoading(true);
     fetch('/api/schools')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch schools');
+        return res.json();
+      })
       .then(data => {
         setSchools(data);
         setFilteredSchools(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
       });
   }, []);
 
+  // Setup image carousel intervals
   useEffect(() => {
+    // Clear previous intervals
     Object.values(intervalsRef.current).forEach(clearInterval);
     intervalsRef.current = {};
 
     schools.forEach((school) => {
-      if (school.image && school.image.length > 1) {
+      const images = school.images || []; // Use images array (plural)
+      if (images.length > 1) {
         intervalsRef.current[school.id] = setInterval(() => {
           setCurrentImageIndex(prev => {
             const current = prev[school.id] || 0;
             return {
               ...prev,
-              [school.id]: (current + 1) % school.image.length,
+              [school.id]: (current + 1) % images.length,
             };
           });
         }, 3000);
@@ -44,6 +59,7 @@ export default function ShowSchools() {
     };
   }, [schools]);
 
+  // Filter schools based on search and filters
   useEffect(() => {
     let filtered = schools;
 
@@ -65,7 +81,17 @@ export default function ShowSchools() {
     setFilteredSchools(filtered);
   }, [searchName, filterCity, filterState, schools]);
 
-  // Calculate counts for badges based on filtered results
+  // Counts for filters badges
+  const cityCounts = schools.reduce((acc, school) => {
+    if (school.city) acc[school.city] = (acc[school.city] || 0) + 1;
+    return acc;
+  }, {});
+
+  const stateCounts = schools.reduce((acc, school) => {
+    if (school.state) acc[school.state] = (acc[school.state] || 0) + 1;
+    return acc;
+  }, {});
+
   const cityFilteredCount = filterCity
     ? filteredSchools.filter(s => s.city === filterCity).length
     : filteredSchools.length;
@@ -74,16 +100,21 @@ export default function ShowSchools() {
     ? filteredSchools.filter(s => s.state === filterState).length
     : filteredSchools.length;
 
-  // For dropdown options counts from full data
-  const cityCounts = schools.reduce((acc, school) => {
-    acc[school.city] = (acc[school.city] || 0) + 1;
-    return acc;
-  }, {});
-
-  const stateCounts = schools.reduce((acc, school) => {
-    acc[school.state] = (acc[school.state] || 0) + 1;
-    return acc;
-  }, {});
+  // Handlers to navigate images manually and reset interval
+  const resetInterval = (schoolId, imagesLength) => {
+    if (intervalsRef.current[schoolId]) {
+      clearInterval(intervalsRef.current[schoolId]);
+    }
+    intervalsRef.current[schoolId] = setInterval(() => {
+      setCurrentImageIndex(prev => {
+        const current = prev[schoolId] || 0;
+        return {
+          ...prev,
+          [schoolId]: (current + 1) % imagesLength,
+        };
+      });
+    }, 3000);
+  };
 
   const handlePrev = (schoolId, imagesLength) => {
     setCurrentImageIndex(prev => {
@@ -107,20 +138,8 @@ export default function ShowSchools() {
     resetInterval(schoolId, imagesLength);
   };
 
-  const resetInterval = (schoolId, imagesLength) => {
-    if (intervalsRef.current[schoolId]) {
-      clearInterval(intervalsRef.current[schoolId]);
-    }
-    intervalsRef.current[schoolId] = setInterval(() => {
-      setCurrentImageIndex(prev => {
-        const current = prev[schoolId] || 0;
-        return {
-          ...prev,
-          [schoolId]: (current + 1) % imagesLength,
-        };
-      });
-    }, 3000);
-  };
+  if (loading) return <p className={styles.loading}>Loading schools...</p>;
+  if (error) return <p className={styles.error}>Error: {error}</p>;
 
   return (
     <div className={styles.container}>
@@ -196,7 +215,7 @@ export default function ShowSchools() {
           <p className={styles.noResults}>No schools found.</p>
         ) : (
           filteredSchools.map((school) => {
-            const images = school.image || [];
+            const images = school.images || [];
             const currentIndex = currentImageIndex[school.id] || 0;
             const currentImage = images.length > 0 ? images[currentIndex] : null;
 
@@ -205,13 +224,14 @@ export default function ShowSchools() {
                 {currentImage ? (
                   <>
                     <img
-                      src={`/schoolImages/${currentImage}`}
-                      alt={`${school.name} image ${currentIndex + 1}`}
+                      src={currentImage}
+                      alt={`${school.name || 'School'} image ${currentIndex + 1}`}
                       className={styles.cardImage}
                     />
                     {images.length > 1 && (
                       <>
                         <button
+                          tabIndex={0}
                           className={`${styles.navButton} ${styles.prevButton}`}
                           onClick={() => handlePrev(school.id, images.length)}
                           aria-label="Previous Image"
@@ -219,6 +239,7 @@ export default function ShowSchools() {
                           ◀
                         </button>
                         <button
+                          tabIndex={0}
                           className={`${styles.navButton} ${styles.nextButton}`}
                           onClick={() => handleNext(school.id, images.length)}
                           aria-label="Next Image"
@@ -237,6 +258,7 @@ export default function ShowSchools() {
                       justifyContent: 'center',
                       backgroundColor: '#eee',
                       color: '#666',
+                      height: '200px',
                     }}
                   >
                     No Image

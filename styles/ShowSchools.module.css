@@ -1,3 +1,5 @@
+/* styles/ShowSchools.module.css */
+
 /* Color Variables */
 :root {
   --color-bg-start: #12121d;
@@ -15,7 +17,6 @@
 }
 
 /* Global or wrapping container style */
-
 body, html {
   margin: 0;
   padding: 0;
@@ -74,7 +75,7 @@ body, html {
 
 .filterInput::placeholder {
   font-weight: 500;
-  color: #5a5a7a;
+  color: #7a7a9a; /* improved contrast */
 }
 
 .filterInput:focus {
@@ -124,7 +125,7 @@ body, html {
   text-align: center;
   box-shadow: 0 0 6px var(--color-gold);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  pointer-events: none;
+  pointer-events: none; /* keep badge non-interactive */
 }
 
 .filterBadge:hover {
@@ -141,6 +142,17 @@ body, html {
 .resetButton:focus-visible {
   outline: 3px solid var(--color-gold);
   outline-offset: 3px;
+}
+
+/* Added cursor pointer to nav buttons */
+.navButton {
+  cursor: pointer;
+}
+
+/* Added active state for nav buttons */
+.navButton:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 6px #b8860baa;
 }
 
 .container {
@@ -214,7 +226,6 @@ body, html {
   font-weight: 700;
   padding: 7px 12px;
   border-radius: 8px;
-  cursor: pointer;
   user-select: none;
   z-index: 10;
   transition: background 0.3s ease, box-shadow 0.3s ease;
@@ -225,6 +236,7 @@ body, html {
   justify-content: center;
   box-shadow: 0 3px 7px #b8860b99;
   text-shadow: 0 0 3px #fff3b0aa;
+  cursor: pointer;
 }
 
 .navButton:hover {

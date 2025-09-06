@@ -7,7 +7,7 @@ export default function AddSchool() {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
   } = useForm({ mode: 'onTouched' });
 
   const [images, setImages] = useState([]);
@@ -20,22 +20,39 @@ export default function AddSchool() {
       const previewUrls = images.map((file) => URL.createObjectURL(file));
       setPreviews(previewUrls);
 
+      // Cleanup object URLs on unmount or when images change
       return () => previewUrls.forEach((url) => URL.revokeObjectURL(url));
+    } else {
+      setPreviews([]);
     }
   }, [images]);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
+
     if (files.length + images.length > 10) {
       setErrorMsg('❌ Maximum 10 images allowed');
       return;
     }
-    setImages((prev) => [...prev, ...files]);
-    setErrorMsg('');
+
+    // Prevent duplicate files by name and size
+    const newFiles = files.filter(
+      (file) =>
+        !images.some((img) => img.name === file.name && img.size === file.size)
+    );
+
+    if (newFiles.length < files.length) {
+      setErrorMsg('❌ Some duplicate images were ignored');
+    } else {
+      setErrorMsg('');
+    }
+
+    setImages((prev) => [...prev, ...newFiles]);
   };
 
   const removeImage = (index) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
+    setErrorMsg('');
   };
 
   const onSubmit = async (data) => {
@@ -45,12 +62,15 @@ export default function AddSchool() {
     }
 
     try {
+      setErrorMsg('');
+      setSuccessMsg('');
+
       const formData = new FormData();
       images.forEach((file) => formData.append('images', file));
 
       const uploadRes = await fetch('/api/schools/upload', {
         method: 'POST',
-        body: formData
+        body: formData,
       });
 
       const uploadData = await uploadRes.json();
@@ -61,21 +81,21 @@ export default function AddSchool() {
 
       const schoolData = {
         ...data,
-        images: uploadData.filenames
+        images: uploadData.urls,
       };
 
       const res = await fetch('/api/schools', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(schoolData)
+        body: JSON.stringify(schoolData),
       });
 
       if (!res.ok) {
-        throw new Error('❌ Failed to add school');
+        const errorRes = await res.json();
+        throw new Error(errorRes.error || 'Failed to add school');
       }
 
       setSuccessMsg('✅ School added successfully!');
-      setErrorMsg('');
       reset();
       setImages([]);
 
@@ -84,7 +104,6 @@ export default function AddSchool() {
         setSuccessMsg('');
         window.location.reload();
       }, 2000);
-
     } catch (err) {
       setErrorMsg(err.message || 'Something went wrong.');
       setSuccessMsg('');
@@ -141,8 +160,8 @@ export default function AddSchool() {
             required: 'Contact is required',
             pattern: {
               value: /^[6-9]\d{9}$/,
-              message: 'Enter a valid 10-digit number'
-            }
+              message: 'Enter a valid 10-digit number',
+            },
           })}
           placeholder="e.g., 9876543210"
         />
@@ -157,8 +176,8 @@ export default function AddSchool() {
             required: 'Email is required',
             pattern: {
               value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: 'Enter a valid email address'
-            }
+              message: 'Enter a valid email address',
+            },
           })}
           placeholder="e.g., school@example.com"
         />
@@ -166,14 +185,32 @@ export default function AddSchool() {
 
         {/* Images */}
         <label className={styles.label}>Upload Images (Max 10)</label>
-        <input className={styles.field} type="file" accept="image/*" multiple onChange={handleImageChange} />
+        <input
+          className={styles.field}
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleImageChange}
+        />
 
         {/* Image Previews */}
         <div className={styles.previewContainer}>
           {previews.map((src, idx) => (
             <div key={idx} className={styles.previewBox}>
-              <img src={src} alt={`Preview ${idx + 1}`} className={styles.previewImage} />
-              <button type="button" onClick={() => removeImage(idx)} className={styles.removeBtn}>×</button>
+              <img
+                src={src}
+                alt={`Preview ${idx + 1}`}
+                className={styles.previewImage}
+                loading="lazy"
+              />
+              <button
+                type="button"
+                aria-label={`Remove image ${idx + 1}`}
+                onClick={() => removeImage(idx)}
+                className={styles.removeBtn}
+              >
+                ×
+              </button>
             </div>
           ))}
         </div>

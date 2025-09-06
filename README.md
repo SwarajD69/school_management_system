@@ -37,16 +37,33 @@ A full-stack web application built with **Next.js** and **MySQL** to manage scho
 
 ## 📃 Application Pages Overview
 
-### 📝 `addSchool.jsx`
+### 📝 `/addSchool`
 
 - Responsive form to input school details
 - Form validation (e.g., email format) implemented with **react-hook-form**
 - Uploads images to **Cloudinary** and stores image URLs in the database
 
-### 🏫 `showSchools.jsx`
+### 🏫 `/showSchools`
 
 - Displays all schools in a responsive card layout
 - Each card shows name, address, city, and school image (from Cloudinary URL)
+
+---
+
+## 📂 Application Routes
+
+- `/addSchool` — Main page to add a new school  
+- `/showSchools` — View all schools in the system  
+- `/` — ❌ Not implemented (visiting this route will return an error)
+
+> ⚠️ **Note:** The home route `/` does not exist and will show an error. Please use `/addSchool` or `/showSchools` directly.
+
+---
+
+## 🎯 How to Use
+
+- Go to `/addSchool` to fill out the school form and upload an image  
+- Then go to `/showSchools` to view all added schools
 
 ---
 
@@ -67,7 +84,7 @@ A full-stack web application built with **Next.js** and **MySQL** to manage scho
      npm install
      ```
 
-   * Create a `.env.local` file in the root directory with the following content (replace placeholders with your credentials):
+   * Create a `.env.local` file in the root directory with the following content (replace with your actual credentials):
 
      ```env
      DB_HOST=your_freesqldatabase_host
@@ -86,7 +103,7 @@ A full-stack web application built with **Next.js** and **MySQL** to manage scho
    npm run dev
    ```
 
-4. Open your browser and go to [http://localhost:3000](http://localhost:3000) to view the app.
+4. Open your browser and go to `http://localhost:3000/addSchool` or `http://localhost:3000/showSchools`
 
 ---
 
